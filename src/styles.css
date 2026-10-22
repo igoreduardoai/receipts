@@ -35,7 +35,7 @@ button { font: 600 14px var(--sans); border: 1px solid var(--line); background: 
 button:hover { border-color: #cbbf9f; }
 button.primary { background: var(--ink); color: #fff; border-color: var(--ink); font-size: 16px; padding: 12px 20px; }
 button.primary kbd { background: transparent; color: #d8d3c6; border-color: #57524a; }
-button.ghost { background: transparent; }
+button.ghost { background: transparent; margin-left: auto; }
 .message { color: var(--red); font-size: 14px; }
 .message.ok { color: var(--green); }
 .results { margin-top: 18px; animation: rise .25s ease-out; }
@@ -44,7 +44,7 @@ button.ghost { background: transparent; }
 .score { display: flex; flex-direction: column; }
 .score-label { font: 12px var(--mono); text-transform: uppercase; color: var(--muted); }
 .score-value { font: 800 28px var(--mono); }
-.meter { flex: 1; min-width: 140px; height: 10px; background: #f0ece1; border-radius: 99px; overflow: hidden; }
+.meter { flex: 1; min-width: 120px; max-width: 260px; height: 10px; background: #f0ece1; border-radius: 99px; overflow: hidden; }
 #meter-fill { height: 100%; width: 0; background: var(--green); transition: width .5s ease; }
 .counts { display: flex; gap: 8px; list-style: none; padding: 0; margin: 0; flex-wrap: wrap; }
 .counts li { font: 12px var(--mono); padding: 3px 8px; border-radius: 99px; border: 1px solid currentColor; }

@@ -28,7 +28,7 @@ Build mode: fast (agent-executed from Igor's brief; Igor does hands-on checks)
   Learner check: Open the page, load the sample, press Check.
   Commit: `Add Receipts page with stamps and score`
 
-- [ ] **3. Evidence panel, copy report, local save**
+- [x] **3. Evidence panel, copy report, local save**
   Becomes usable: core journey steps 7–9.
   PRD ref: `prd.md > Evidence`, `prd.md > Convenience`
   Spec ref: `spec.md > UI`
