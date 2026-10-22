@@ -1,0 +1,8 @@
+# Personal learning context stays local (Devpost Learn skill pack convention)
+/devpost/learner-profile.md
+# Local credentials
+.env
+.env.*
+!.env.example
+node_modules/
+.DS_Store
