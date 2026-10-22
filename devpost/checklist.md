@@ -47,13 +47,13 @@ Build mode: fast (agent-executed from Igor's brief; Igor does hands-on checks)
 ## Code Tour and App Map
 - [ ] Learning activity complete
 - [ ] Optional edit and transfer reflection addressed
-- [ ] `devpost/app-map.html` generated from finished code, checked, and shown
+- [x] `devpost/app-map.html` generated from finished code, checked, and shown
 
-Activity and evidence: pending
-Route and stops: pending
-Edit outcome: pending
-Reflection: pending
-Activity mode: pending
+Activity and evidence: reference route written in devpost/app-map.html; live activity with Igor not done yet
+Route and stops: src/app.js run() → src/engine.js bestMatches → verdictFor (reference only)
+Edit outcome: not applicable yet
+Reflection: not offered yet
+Activity mode: static reference (agent-built)
 
 ## Revisions
 - Document titles now count toward coverage — a second, non-sample test ("Bike share now has 340 stations") scored Partial only because "bike share" lived in the title, not the sentence.

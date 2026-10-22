@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Receipts — App Map</title>
+<style>
+body{font:16px/1.55 system-ui,sans-serif;background:#fbfaf6;color:#1d1b16;max-width:860px;margin:0 auto;padding:28px 20px}
+h1,h2{font-family:ui-monospace,monospace}h1{margin:0}h2{font-size:17px;text-transform:uppercase;margin-top:28px}
+code{font-family:ui-monospace,monospace;background:#f1ece0;padding:1px 4px;border-radius:4px;font-size:.88em}
+.flow{display:flex;gap:8px;flex-wrap:wrap;align-items:stretch}.box{flex:1;min-width:150px;background:#fff;border:1px solid #e6e1d4;border-radius:10px;padding:10px 12px;font-size:14px}
+.arrow{align-self:center;font-weight:700;color:#6b665b}ol li{margin-bottom:8px}details{background:#fff;border:1px solid #e6e1d4;border-radius:10px;padding:8px 12px;margin:8px 0}
+.note{font-size:13px;color:#6b665b}
+</style></head><body>
+<h1>🧾 Receipts — App Map</h1>
+<p>Receipts checks each sentence of an AI answer against pasted sources and stamps it Supported, Partial, No receipt, Number mismatch or Negation flip. Three pieces: the page (<code>index.html</code> + <code>src/styles.css</code>), the UI wiring (<code>src/app.js</code>), and the engine (<code>src/engine.js</code>). No server, no external services; the only storage is the browser's localStorage key <code>receipts:v1</code>.</p>
+
+<h2>One action, end to end: “Check receipts”</h2>
+<div class="flow" role="list">
+  <div class="box" role="listitem"><b>Click</b><br>button <code>#check</code> in <code>index.html</code></div><div class="arrow" aria-hidden="true">→</div>
+  <div class="box" role="listitem"><b>run()</b><br><code>src/app.js</code> reads both boxes, saves to localStorage</div><div class="arrow" aria-hidden="true">→</div>
+  <div class="box" role="listitem"><b>checkAnswer()</b><br><code>src/engine.js</code>: buildIndex → bestMatches → verdictFor</div><div class="arrow" aria-hidden="true">→</div>
+  <div class="box" role="listitem"><b>render() / showEvidence()</b><br>stamps, score, highlighted receipt</div>
+</div>
+
+<h2>Reference route (3 stops)</h2>
+<ol>
+<li><code>src/app.js</code> → search <code>function run()</code>: validates input, calls <code>checkAnswer</code>, then <code>render()</code>.</li>
+<li><code>src/engine.js</code> → search <code>export function bestMatches</code>: scores every passage by IDF-weighted <code>coverage()</code>, BM25 as tiebreak; adjacent-sentence pairs only win if they add 10+ points of coverage.</li>
+<li><code>src/engine.js</code> → search <code>export function verdictFor</code>: thresholds from <code>THRESHOLDS</code>, then the number (<code>extractNumbers</code>) and negation (<code>hasNegation</code>) overrides.</li>
+</ol>
+<p class="note">This is a reference route; it was not toured live with the learner.</p>
+
+<h2>To change this, start here</h2>
+<details><summary>Make the checker stricter or looser</summary><p><code>THRESHOLDS</code> at the top of <code>src/engine.js</code> (Supported 0.6, Partial 0.35). Run <code>npm test</code> after.</p></details>
+<details><summary>Teach it a synonym</summary><p>Add an entry to the <code>CANON</code> map in <code>src/engine.js</code> (stemmed word → shared term).</p></details>
+<details><summary>Change stamp wording or colors</summary><p>Labels/icons: <code>VERDICTS</code> in <code>src/engine.js</code>. Colors: <code>.v-supported</code> … <code>.v-short</code> in <code>src/styles.css</code>.</p></details>
+<details><summary>Change the sample</summary><p><code>src/sample.js</code> — then update the expected stamps in <code>tests/engine.test.js</code>.</p></details>
+
+<h2>A practice to reuse</h2>
+<p>Test with a second, unrelated input before trusting the first. The sample passed on the first try, but a bike-share example (<code>tests/engine.test.js</code> → “document title words count as context”) exposed two real gaps — synonyms hiding a number change and title words being ignored — recorded in <code>devpost/checklist.md &gt; Revisions</code>. The same move works on any rule-based or AI feature: keep one regression test from a case you did not design for.</p>
+
+<h2>Run it again</h2>
+<p><code>npm start</code> → open http://localhost:5173 → Load sample → Check receipts. <code>npm test</code> runs the engine suite.</p>
+<p class="note">Snapshot of commit <code>e1b4a35</code>; code can drift after this.</p>
+</body></html>
