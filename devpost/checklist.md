@@ -1,6 +1,8 @@
 ---
 doc: checklist
-status: draft
+status: approved
+approved_by: Igor Eduardo
+approved_on: 2026-10-22
 ---
 # Build Checklist
 

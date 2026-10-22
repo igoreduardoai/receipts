@@ -31,16 +31,16 @@
 **Built with:** javascript, html5, css3, node.js (tests)
 
 **Links:**
-- Public GitHub repo (MIT, license visible in About): `https://github.com/igoreduardoai/receipts` ← to create
+- Public GitHub repo (MIT, license visible in About): `https://github.com/igoreduardoai/receipts` (created/pushed: pending GitHub auth for igoreduardoai)
 - Demo video (YouTube/Vimeo, public, < 3 min): ← to record from VIDEO-SCRIPT.md
-- Optional live demo: GitHub Pages of the repo
+- Optional live demo: GitHub Pages of the repo → `https://igoreduardoai.github.io/receipts/` (after push + Pages enabled)
 
 **Testing instructions:** `npm start` → http://localhost:5173 → Load sample → Check receipts. Or open the GitHub Pages link. `npm test` runs the engine suite.
 
 **Pre-existing code disclosure:** none. Only the Devpost Learn skill pack (`.agents/skills`) and Node/Python built-ins.
 
 ## Before submitting
-- [ ] Read scope/prd/spec in `devpost/`, change `status: draft` → `status: approved` if you agree (or tell the agent what to change)
+- [x] Read scope/prd/spec in `devpost/` — approved by Igor 2026-10-22 (status: approved)
 - [ ] Try the app yourself (Load sample → Check → click red/purple/orange sentences)
 - [ ] Create public repo + push (agent can do it after your OK); confirm MIT shows in About
 - [ ] Record + upload video (public)

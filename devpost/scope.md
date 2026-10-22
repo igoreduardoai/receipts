@@ -1,8 +1,10 @@
 ---
 doc: scope
-status: draft
+status: approved
+approved_by: Igor Eduardo
+approved_on: 2026-10-22
 ---
-<!-- Drafted 2026-10-22 from Igor's delegated brief; Igor reviews and sets status: approved. -->
+<!-- Drafted 2026-10-22 from Igor's delegated brief; approved by Igor 2026-10-22. -->
 
 # Receipts
 
