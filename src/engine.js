@@ -20,7 +20,17 @@ has have having he her here hers herself him himself his how i if in into is it 
 myself now of off on once only or other our ours ourselves out over own same she should so some such than that
 the their theirs them themselves then there these they this those through to too under until up very was we were
 what when where which while who whom why will with would you your yours yourself yourselves new its it's
-including include includes like well many much via per one's`.split(/\s+/));
+including include includes like well many much via per one's versus vs compared compare against still now
+about approximately roughly around nearly almost`.split(/\s+/));
+
+// Tiny canonical map for words reports and summaries swap all the time.
+const CANON = new Map(Object.entries({
+  rose: 'increas', ris: 'increas', grew: 'increas', grow: 'increas', increas: 'increas', climb: 'increas', jump: 'increas', gain: 'increas', up: 'increas',
+  fell: 'decreas', fall: 'decreas', drop: 'decreas', declin: 'decreas', decreas: 'decreas', down: 'decreas',
+  cost: 'price', pric: 'price', price: 'price', fee: 'fee',
+  ebook: 'ebook', ebik: 'ebik',
+  approximate: 'about', roughly: 'about', around: 'about',
+}));
 
 const NEGATIONS = /\b(not|no|never|without|none|nor|neither|cannot|isn't|wasn't|aren't|weren't|didn't|doesn't|don't|hasn't|haven't|hadn't|won't|wouldn't|can't|couldn't|shouldn't)\b|n't\b/i;
 
@@ -82,12 +92,15 @@ export function stem(word) {
 
 /** Content terms (stemmed, no stopwords, no pure numbers). */
 export function tokenize(text) {
-  const words = String(text || '').toLowerCase().replace(/[’]/g, "'").match(/[a-z][a-z'-]*[a-z]|[a-z]|\d+[a-z]+/g) || [];
+  const words = String(text || '').toLowerCase().replace(/[’]/g, "'").match(/[a-z][a-z0-9'-]*[a-z0-9]|[a-z]|\d+[a-z]+/g) || [];
   const terms = [];
   for (const raw of words) {
+    const compact = raw.replace(/-/g, '');
+    if (CANON.has(raw) || CANON.has(stem(compact))) { terms.push(CANON.get(raw) || CANON.get(stem(compact))); continue; }
     for (const part of raw.split('-')) {
       if (!part || STOPWORDS.has(part) || NEGATIONS.test(part)) continue;
-      terms.push(stem(part));
+      const st = stem(part);
+      terms.push(CANON.get(st) || CANON.get(part) || st);
     }
   }
   return terms;
@@ -179,7 +192,8 @@ export function bestMatches(claim, index, k = 2) {
 
 /** Decide the stamp for one claim. */
 export function verdictFor(claim, terms, matches, index) {
-  if (new Set(terms).size < 3) return { verdict: 'short', coverage: 0, numbers: null };
+  const distinct = new Set(terms).size;
+  if (distinct < 2 || (distinct < 3 && !extractNumbers(claim).length)) return { verdict: 'short', coverage: 0, numbers: null };
   const best = matches[0];
   const cov = best ? best.coverage : 0;
   let verdict = cov >= THRESHOLDS.supported ? 'supported' : cov >= THRESHOLDS.partial ? 'partial' : 'unsupported';

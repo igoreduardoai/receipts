@@ -29,7 +29,7 @@ Receipt paper off-white (#fbfaf6), ink near-black, monospace for stamps and numb
 - Sentences are split robustly (abbreviations like "e.g.", "Dr.", decimals "3.5" don't split).
 - Each answer sentence is compared with every source sentence (and pairs of adjacent sentences) using BM25 + content-word coverage.
 - Verdicts: Supported (coverage ≥ 0.6), Partial (≥ 0.35), No receipt (below). Overrides: if the best match is at least Partial but a number in the claim is absent from that passage and from the claim's matched document → Number mismatch; if exactly one side contains a negation (not, no, never, without, n't) → Negation flip.
-- Very short sentences (< 3 content words) are marked "Too short to check" and excluded from the score.
+- Very short sentences (< 3 content words, or < 2 if the sentence contains a number) are marked "Too short to check" and excluded from the score.
 
 ### Evidence
 - Clicking a sentence highlights it and shows top-2 source passages with matched words marked, the coverage %, and the document title.
