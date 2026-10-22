@@ -64,3 +64,10 @@ test('markdown report lists every sentence', () => {
   assert.match(md, /Receipt score: 5\/9/);
   assert.match(md, /Answer says 12 · Source says 11/);
 });
+
+test('document title words count as context, and bullet answers work', () => {
+  const src = '# City Bike Share Q3 Update\nThe program now has 340 stations and 4,100 bikes. Ridership grew 22% compared with Q2. Helmets are not provided at stations.';
+  const ans = 'Bike share now has 340 stations and about 4,100 bikes.\n- Ridership rose 25% versus Q2.\n- Helmets are provided at every station.\n- The city plans to add scooters next spring.';
+  const v = checkAnswer(src, ans).results.map((r) => r.verdict);
+  assert.deepEqual(v, ['supported', 'number', 'negation', 'unsupported']);
+});

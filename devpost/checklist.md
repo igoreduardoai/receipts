@@ -56,3 +56,4 @@ Reflection: pending
 Activity mode: pending
 
 ## Revisions
+- Document titles now count toward coverage — a second, non-sample test ("Bike share now has 340 stations") scored Partial only because "bike share" lived in the title, not the sentence.

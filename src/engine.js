@@ -109,11 +109,12 @@ export function buildIndex(sourcesText) {
   const passages = [];
   for (const doc of docs) {
     const sents = splitSentences(doc.text);
+    const titleTerms = doc.title.startsWith('Source ') ? [] : tokenize(doc.title);
     sents.forEach((s, i) => {
-      passages.push({ docId: doc.id, docTitle: doc.title, text: s, span: [i, i], terms: tokenize(s) });
+      passages.push({ docId: doc.id, docTitle: doc.title, text: s, span: [i, i], terms: tokenize(s), titleTerms });
       if (i + 1 < sents.length) {
         const pair = `${s} ${sents[i + 1]}`;
-        passages.push({ docId: doc.id, docTitle: doc.title, text: pair, span: [i, i + 1], terms: tokenize(pair), pair: true });
+        passages.push({ docId: doc.id, docTitle: doc.title, text: pair, span: [i, i + 1], terms: tokenize(pair), titleTerms, pair: true });
       }
     });
   }
@@ -138,11 +139,11 @@ function bm25(queryTerms, passage, index, k1 = 1.2, b = 0.75) {
   return score;
 }
 
-/** IDF-weighted share of the claim's unique terms that appear in the passage. */
+/** IDF-weighted share of the claim's unique terms that appear in the passage (or its document title). */
 export function coverage(claimTerms, passage, index) {
   const uniq = [...new Set(claimTerms)];
   if (!uniq.length) return { value: 0, matched: [] };
-  const pTerms = new Set(passage.terms);
+  const pTerms = new Set([...passage.terms, ...(passage.titleTerms || [])]);
   let total = 0;
   let hit = 0;
   const matched = [];
