@@ -8,7 +8,7 @@ Build mode: fast (agent-executed from Igor's brief; Igor does hands-on checks)
 
 ## Slices
 
-- [ ] **1. Engine gives a verdict per sentence**
+- [x] **1. Engine gives a verdict per sentence**
   Becomes usable: `checkAnswer(sources, answer)` returns stamps for every sentence of the sample, covered by tests.
   Why now: The kernel (receipt + number/negation detection) is the riskiest part.
   PRD ref: `prd.md > Checking`

@@ -1,0 +1,12 @@
+{
+  "name": "receipts",
+  "version": "0.1.0",
+  "description": "Receipts: check every sentence of an AI answer against your sources. Runs locally in the browser.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Igor Eduardo <studentcnnbd@gmail.com>",
+  "scripts": {
+    "start": "python3 -m http.server 5173",
+    "test": "node --test tests/"
+  }
+}
