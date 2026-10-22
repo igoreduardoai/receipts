@@ -154,3 +154,5 @@ try {
     if (saved.sources && saved.answer) run();
   }
 } catch { /* ignore corrupt storage */ }
+
+window.__receiptsReady = true;

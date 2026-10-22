@@ -2,6 +2,8 @@
 
 **Show me the receipts for every AI claim.**
 
+![Receipts flags a changed number in an AI summary](docs/screenshot.png)
+
 Paste an AI-written answer and the sources it was supposed to come from. Receipts checks the answer **sentence by sentence** and stamps each one:
 
 | Stamp | Meaning |

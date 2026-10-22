@@ -76,5 +76,14 @@
 
   <noscript><p class="message">Receipts needs JavaScript.</p></noscript>
   <script type="module" src="src/app.js"></script>
+  <script>
+    // If the browser blocks ES modules on file://, explain how to run it.
+    setTimeout(function () {
+      if (!window.__receiptsReady && location.protocol === 'file:') {
+        var m = document.getElementById('message');
+        m.textContent = 'Your browser blocked local scripts. Run "npm start" and open http://localhost:5173 instead.';
+      }
+    }, 1200);
+  </script>
 </body>
 </html>
