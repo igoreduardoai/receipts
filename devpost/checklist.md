@@ -18,7 +18,7 @@ Build mode: fast (agent-executed from Igor's brief; Igor does hands-on checks)
   Learner check: Read the test names and confirm the verdicts match your intuition.
   Commit: `Add grounding engine with number and negation checks`
 
-- [ ] **2. One page: paste, check, see stamps and score**
+- [x] **2. One page: paste, check, see stamps and score**
   Becomes usable: index.html runs the core journey steps 1–6.
   Why now: Turns the engine into the product.
   PRD ref: `prd.md > The Core Journey`

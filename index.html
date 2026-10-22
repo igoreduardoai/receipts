@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Receipts — show me the receipts for every AI claim</title>
+  <meta name="description" content="Paste an AI answer and its sources. Receipts checks every sentence and shows the source line that backs it. Runs locally." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧾</text></svg>" />
+  <link rel="stylesheet" href="src/styles.css" />
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <span class="logo" aria-hidden="true">🧾</span>
+      <div>
+        <h1>Receipts</h1>
+        <p class="tagline">Show me the receipts for every AI claim.</p>
+      </div>
+    </div>
+    <p class="privacy" title="No network calls are made">🔒 Runs in your browser. Nothing is uploaded.</p>
+  </header>
+
+  <main>
+    <section class="inputs" aria-label="Inputs">
+      <div class="field">
+        <div class="field-head">
+          <label for="sources">1 · Sources</label>
+          <span class="hint">Paste the documents the answer should come from. Separate documents with a line <code>---</code>; start one with <code># Title</code> to name it.</span>
+        </div>
+        <textarea id="sources" spellcheck="false" placeholder="# Quarterly report&#10;Paste the source text here…"></textarea>
+      </div>
+      <div class="field">
+        <div class="field-head">
+          <label for="answer">2 · AI answer</label>
+          <span class="hint">Paste what ChatGPT, Claude or any assistant wrote.</span>
+        </div>
+        <textarea id="answer" spellcheck="false" placeholder="Paste the AI-written summary or answer here…"></textarea>
+      </div>
+    </section>
+
+    <div class="actions">
+      <button id="check" class="primary" type="button">Check receipts <kbd>Ctrl</kbd>+<kbd>Enter</kbd></button>
+      <button id="sample" type="button">Load sample</button>
+      <button id="clear" type="button">Clear</button>
+      <span id="message" class="message" role="status" aria-live="polite"></span>
+    </div>
+
+    <section id="results" class="results" hidden aria-label="Results">
+      <div class="scorebar">
+        <div class="score">
+          <span class="score-label">Receipt score</span>
+          <span id="score-value" class="score-value"></span>
+        </div>
+        <div class="meter" aria-hidden="true"><div id="meter-fill"></div></div>
+        <ul id="counts" class="counts"></ul>
+        <button id="copy" type="button" class="ghost">Copy report</button>
+      </div>
+      <div class="grid">
+        <article class="paper">
+          <h2>Your AI answer, stamped</h2>
+          <p class="sub">Click any sentence to see its receipt.</p>
+          <ol id="sentences" class="sentences"></ol>
+        </article>
+        <aside id="evidence" class="evidence paper" aria-live="polite">
+          <h2>Receipt</h2>
+          <p class="sub">Select a sentence on the left.</p>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Receipts checks whether each claim <em>appears in your sources</em> — not whether it is true. Matching is word-based (BM25 + term coverage), so paraphrases may show as Partial.
+    <span class="legend"></span>
+  </footer>
+
+  <noscript><p class="message">Receipts needs JavaScript.</p></noscript>
+  <script type="module" src="src/app.js"></script>
+</body>
+</html>
