@@ -6,3 +6,4 @@
 !.env.example
 node_modules/
 .DS_Store
+*.bak-2026-10-*

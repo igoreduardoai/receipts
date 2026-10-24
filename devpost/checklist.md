@@ -61,3 +61,4 @@ Activity mode: static reference (agent-built)
 - Document titles now count toward coverage — a second, non-sample test ("Bike share now has 340 stations") scored Partial only because "bike share" lived in the title, not the sentence.
 - Added a tiny synonym map (rose/grew/up → increase, costs/price, e-book) and alphanumeric tokens (Q2) — the bike-share test showed "Ridership rose 25% versus Q2" missing its number mismatch because the verbs differed.
 - Sentences with a number need only 2 content words to be checked — "E-bikes are 35% of the fleet" was wrongly marked Too short.
+- 2026-10-24: Added two fictional bill samples (wrong amount, bill that matches the quote) and a sample picker; field 2 relabeled "Text to check". Engine unchanged; 2 new tests (13 total).

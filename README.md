@@ -1,10 +1,12 @@
 # 🧾 Receipts
 
-**Show me the receipts for every AI claim.**
+**Before you pay, find what doesn't add up in this bill.**
+
+Check a bill against the quote you agreed to, or an AI answer against its sources, line by line. Try it: https://igoreduardoai.github.io/receipts/
 
 ![Receipts flags a changed number in an AI summary](docs/screenshot.png)
 
-Paste an AI-written answer and the sources it was supposed to come from. Receipts checks the answer **sentence by sentence** and stamps each one:
+Paste the text to check (bill lines or an AI answer) and the sources it should match. Receipts checks it **line by line** and stamps each one:
 
 | Stamp | Meaning |
 |---|---|
@@ -26,15 +28,15 @@ Requirements: any modern browser. For the local server, Python 3 (or any static 
 
 ```bash
 npm start          # serves the folder at http://localhost:5173 (python3 -m http.server)
-# open http://localhost:5173 → "Load sample" → "Check receipts"
-npm test           # 11 engine tests (node:test, zero dependencies)
+# open http://localhost:5173 → "Load a sample…" → "Check receipts"
+npm test           # 13 engine tests (node:test, zero dependencies)
 ```
 
 Opening `index.html` straight from disk can be blocked by some browsers because it uses ES modules; use `npm start` or any static host (GitHub Pages works as-is).
 
 ### Using your own text
 - Paste one or more documents into **Sources**. Put a line with `---` between documents and start a document with `# Title` to name it.
-- Paste the AI answer (paragraphs or bullets) into **AI answer**.
+- Paste the bill lines or the AI answer (paragraphs or bullets) into **Text to check**.
 - Press **Check receipts** or Ctrl/⌘+Enter. Arrow keys move between sentences.
 
 ## How it works
@@ -50,6 +52,7 @@ Why no LLM? A judge model costs money, needs a key, can hallucinate itself, and 
 ### Known limits
 - Word-based: a paraphrase with totally different words shows as Partial / No receipt (the closest passage is still shown).
 - English stopwords and stemming only.
+- Compares line by line; it does not recompute totals.
 - Checks presence in sources, not truth, and is not a substitute for professional review.
 
 ## Project layout
@@ -57,7 +60,7 @@ Why no LLM? A judge model costs money, needs a key, can hallucinate itself, and 
 index.html            page
 src/engine.js         matching engine (pure, tested)
 src/app.js            UI wiring, evidence panel, report, local save
-src/sample.js         fictional sample (Riverbend Public Library)
+src/sample.js         fictional samples (a plumber's quote with two bills; a library report)
 src/styles.css        receipt-paper look
 tests/engine.test.js  node:test suite
 devpost/              scope.md, prd.md, spec.md, checklist.md, app-map.html (Devpost Learn skill pack)

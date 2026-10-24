@@ -1,5 +1,5 @@
 import { checkAnswer, VERDICTS, toMarkdownReport, tokenize, extractNumbers } from './engine.js';
-import { SAMPLE_SOURCES, SAMPLE_ANSWER } from './sample.js';
+import { SAMPLES } from './sample.js';
 
 const $ = (id) => document.getElementById(id);
 const els = {
@@ -50,11 +50,11 @@ function showEvidence(id) {
   activeId = id;
   els.sentences.querySelectorAll('.sentence').forEach((li) => li.classList.toggle('active', Number(li.dataset.id) === id));
   const v = VERDICTS[r.verdict];
-  let html = `<h2>Receipt</h2><p class="sub">Sentence ${id + 1} of ${report.results.length}</p>`;
+  let html = `<h2>Receipt</h2><p class="sub">Line ${id + 1} of ${report.results.length}</p>`;
   html += `<p class="claim v-${r.verdict}"><span class="stamp">${v.icon} ${esc(v.label)}</span><br>${highlight(r.sentence, r.matches[0]?.matchedTerms || [], r.numbers?.claim || [])}</p>`;
   html += `<p class="why">${esc(WHY[r.verdict])}</p>`;
   if (r.numbers) {
-    html += `<p class="diff"><span>Answer says ${esc(r.numbers.claim.join(', '))}</span><span class="src">Source says ${esc(r.numbers.source.join(', ') || '—')}</span></p>`;
+    html += `<p class="diff"><span>Your text says ${esc(r.numbers.claim.join(', '))}</span><span class="src">Source says ${esc(r.numbers.source.join(', ') || '—')}</span></p>`;
   }
   if (r.verdict !== 'short') {
     if (!r.matches.length) html += '<p class="sub">No source sentence shares meaningful words with this claim.</p>';
@@ -74,13 +74,13 @@ function run() {
   const sources = els.sources.value.trim();
   const answer = els.answer.value.trim();
   if (!sources || !answer) {
-    say(!sources ? 'Paste some sources first.' : 'Paste the AI answer to check.');
+    say(!sources ? 'Paste some sources first.' : 'Paste the text to check.');
     els.results.hidden = true;
     return;
   }
   report = checkAnswer(sources, answer);
   save();
-  say(`Checked ${report.results.length} sentences against ${report.passages} source sentences in ${report.docs} document${report.docs === 1 ? '' : 's'}.`, true);
+  say(`Checked ${report.results.length} lines against ${report.passages} source sentences in ${report.docs} document${report.docs === 1 ? '' : 's'}.`, true);
   render();
 }
 
@@ -126,12 +126,16 @@ els.copy.addEventListener('click', async () => {
 [els.sources, els.answer].forEach((t) => t.addEventListener('input', save));
 
 els.check.addEventListener('click', run);
-els.sample.addEventListener('click', () => {
-  els.sources.value = SAMPLE_SOURCES;
-  els.answer.value = SAMPLE_ANSWER;
+els.sample.addEventListener('change', () => {
+  const s = SAMPLES[els.sample.value];
+  if (!s) return;
+  els.sources.value = s.sources;
+  els.answer.value = s.answer;
   activeId = null;
+  els.results.hidden = true;
   save();
-  say('Sample loaded: a fictional library report and an AI summary of it. Press Check receipts.', true);
+  say(`${s.note} Press Check receipts.`, true);
+  els.sample.value = '';
 });
 els.clear.addEventListener('click', () => {
   els.sources.value = '';

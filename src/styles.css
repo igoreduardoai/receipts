@@ -35,6 +35,7 @@ button { font: 600 14px var(--sans); border: 1px solid var(--line); background: 
 button:hover { border-color: #cbbf9f; }
 button.primary { background: var(--ink); color: #fff; border-color: var(--ink); font-size: 16px; padding: 12px 20px; }
 button.primary kbd { background: transparent; color: #d8d3c6; border-color: #57524a; }
+select { font: 600 14px var(--sans); border: 1px solid var(--line); background: var(--card); color: var(--ink); padding: 10px 12px; border-radius: 10px; cursor: pointer; }
 button.ghost { background: transparent; margin-left: auto; }
 .message { color: var(--red); font-size: 14px; }
 .message.ok { color: var(--green); }
