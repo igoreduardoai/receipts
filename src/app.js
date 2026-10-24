@@ -1,5 +1,5 @@
 import { checkAnswer, VERDICTS, toMarkdownReport, tokenize, extractNumbers } from './engine.js';
-import { SAMPLES } from './sample.js';
+import { SAMPLE_SOURCES, SAMPLE_ANSWER } from './sample.js';
 
 const $ = (id) => document.getElementById(id);
 const els = {
@@ -18,7 +18,6 @@ const WHY = {
   unsupported: 'No source passage covers this claim. It may be invented, or phrased very differently.',
   number: 'This sentence matches a source passage, but its number does not.',
   negation: 'This sentence matches a source passage, but one of them says “not/no/never” and the other does not.',
-  duplicate: 'This line repeats an earlier one word for word and number for number. On a bill, that usually means you are charged twice.',
   short: 'Too few meaningful words to check reliably.',
 };
 
@@ -51,14 +50,11 @@ function showEvidence(id) {
   activeId = id;
   els.sentences.querySelectorAll('.sentence').forEach((li) => li.classList.toggle('active', Number(li.dataset.id) === id));
   const v = VERDICTS[r.verdict];
-  let html = `<h2>Receipt</h2><p class="sub">Line ${id + 1} of ${report.results.length}</p>`;
+  let html = `<h2>Receipt</h2><p class="sub">Sentence ${id + 1} of ${report.results.length}</p>`;
   html += `<p class="claim v-${r.verdict}"><span class="stamp">${v.icon} ${esc(v.label)}</span><br>${highlight(r.sentence, r.matches[0]?.matchedTerms || [], r.numbers?.claim || [])}</p>`;
   html += `<p class="why">${esc(WHY[r.verdict])}</p>`;
   if (r.numbers) {
-    html += `<p class="diff"><span>Your text says ${esc(r.numbers.claim.join(', '))}</span><span class="src">Source says ${esc(r.numbers.source.join(', ') || '—')}</span></p>`;
-  }
-  if (r.verdict === 'duplicate') {
-    html += `<p class="diff"><span>Same as line ${r.duplicateOf + 1}: ${esc(report.results[r.duplicateOf].sentence)}</span></p>`;
+    html += `<p class="diff"><span>Answer says ${esc(r.numbers.claim.join(', '))}</span><span class="src">Source says ${esc(r.numbers.source.join(', ') || '—')}</span></p>`;
   }
   if (r.verdict !== 'short') {
     if (!r.matches.length) html += '<p class="sub">No source sentence shares meaningful words with this claim.</p>';
@@ -78,13 +74,13 @@ function run() {
   const sources = els.sources.value.trim();
   const answer = els.answer.value.trim();
   if (!sources || !answer) {
-    say(!sources ? 'Paste some sources first.' : 'Paste the text to check.');
+    say(!sources ? 'Paste some sources first.' : 'Paste the AI answer to check.');
     els.results.hidden = true;
     return;
   }
   report = checkAnswer(sources, answer);
   save();
-  say(`Checked ${report.results.length} lines against ${report.passages} source sentences in ${report.docs} document${report.docs === 1 ? '' : 's'}.`, true);
+  say(`Checked ${report.results.length} sentences against ${report.passages} source sentences in ${report.docs} document${report.docs === 1 ? '' : 's'}.`, true);
   render();
 }
 
@@ -130,16 +126,12 @@ els.copy.addEventListener('click', async () => {
 [els.sources, els.answer].forEach((t) => t.addEventListener('input', save));
 
 els.check.addEventListener('click', run);
-els.sample.addEventListener('change', () => {
-  const s = SAMPLES[els.sample.value];
-  if (!s) return;
-  els.sources.value = s.sources;
-  els.answer.value = s.answer;
+els.sample.addEventListener('click', () => {
+  els.sources.value = SAMPLE_SOURCES;
+  els.answer.value = SAMPLE_ANSWER;
   activeId = null;
-  els.results.hidden = true;
   save();
-  say(`${s.note} Press Check receipts.`, true);
-  els.sample.value = '';
+  say('Sample loaded: a fictional library report and an AI summary of it. Press Check receipts.', true);
 });
 els.clear.addEventListener('click', () => {
   els.sources.value = '';

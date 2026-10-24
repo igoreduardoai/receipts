@@ -1,12 +1,10 @@
 # 🧾 Receipts
 
-**Before you pay, find what doesn't add up in this bill.**
-
-Check a bill against the quote you agreed to, or an AI answer against its sources, line by line. Try it: https://igoreduardoai.github.io/receipts/
+**Show me the receipts for every AI claim.**
 
 ![Receipts flags a changed number in an AI summary](docs/screenshot.png)
 
-Paste the text to check (bill lines or an AI answer) and the sources it should match. Receipts checks it **line by line** and stamps each one:
+Paste an AI-written answer and the sources it was supposed to come from. Receipts checks the answer **sentence by sentence** and stamps each one:
 
 | Stamp | Meaning |
 |---|---|
@@ -15,7 +13,6 @@ Paste the text to check (bill lines or an AI answer) and the sources it should m
 | ❌ No receipt | Nothing in the sources covers it — possibly invented. |
 | 🔢 Number mismatch | Worded like the source, but a number changed (says 12, source says 11). |
 | ⚠️ Negation flip | Worded like the source, but one says "not/no/never" and the other doesn't. |
-| 🔁 Duplicate | Repeats an earlier line word for word and number for number (a fee billed twice). |
 
 Click any sentence to see its receipt: the closest source sentence, the document it came from, the shared words highlighted, and — for mismatches — the two numbers side by side. **Copy report** exports a Markdown checklist.
 
@@ -29,15 +26,15 @@ Requirements: any modern browser. For the local server, Python 3 (or any static 
 
 ```bash
 npm start          # serves the folder at http://localhost:5173 (python3 -m http.server)
-# open http://localhost:5173 → "Load a sample…" → "Check receipts"
-npm test           # 14 engine tests (node:test, zero dependencies)
+# open http://localhost:5173 → "Load sample" → "Check receipts"
+npm test           # 11 engine tests (node:test, zero dependencies)
 ```
 
 Opening `index.html` straight from disk can be blocked by some browsers because it uses ES modules; use `npm start` or any static host (GitHub Pages works as-is).
 
 ### Using your own text
 - Paste one or more documents into **Sources**. Put a line with `---` between documents and start a document with `# Title` to name it.
-- Paste the bill lines or the AI answer (paragraphs or bullets) into **Text to check**.
+- Paste the AI answer (paragraphs or bullets) into **AI answer**.
 - Press **Check receipts** or Ctrl/⌘+Enter. Arrow keys move between sentences.
 
 ## How it works
@@ -47,14 +44,12 @@ Opening `index.html` straight from disk can be blocked by some browsers because 
 3. For each answer sentence, scores every passage by **IDF-weighted term coverage** (how much of the claim's rare, meaningful vocabulary the passage contains), with BM25 as the tiebreaker.
 4. Coverage ≥ 60% → Supported, ≥ 35% → Partial, else No receipt.
 5. On any matched claim, two detectors run: numbers in the claim that are absent from the matched passages → **Number mismatch**; negation on only one side → **Negation flip**.
-6. A checked line with the same content words and numbers as an earlier line → **Duplicate**.
 
 Why no LLM? A judge model costs money, needs a key, can hallucinate itself, and its verdict can't be audited. Every Receipts verdict is explained by the highlighted words.
 
 ### Known limits
 - Word-based: a paraphrase with totally different words shows as Partial / No receipt (the closest passage is still shown).
 - English stopwords and stemming only.
-- Compares line by line; it does not recompute totals.
 - Checks presence in sources, not truth, and is not a substitute for professional review.
 
 ## Project layout
@@ -62,7 +57,7 @@ Why no LLM? A judge model costs money, needs a key, can hallucinate itself, and 
 index.html            page
 src/engine.js         matching engine (pure, tested)
 src/app.js            UI wiring, evidence panel, report, local save
-src/sample.js         fictional samples (a plumber's quote with three bills; a library report)
+src/sample.js         fictional sample (Riverbend Public Library)
 src/styles.css        receipt-paper look
 tests/engine.test.js  node:test suite
 devpost/              scope.md, prd.md, spec.md, checklist.md, app-map.html (Devpost Learn skill pack)

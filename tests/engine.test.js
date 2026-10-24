@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { splitSentences, splitDocuments, extractNumbers, hasNegation, stem, checkAnswer, toMarkdownReport } from '../src/engine.js';
-import { SAMPLE_SOURCES, SAMPLE_ANSWER, BILL_QUOTE, BILLS } from '../src/sample.js';
+import { SAMPLE_SOURCES, SAMPLE_ANSWER } from '../src/sample.js';
 
 test('sentence splitter keeps abbreviations and decimals together', () => {
   const s = splitSentences('Visits hit 1.2 million, e.g. at Dr. Smith St. branch. Next sentence here! And a third?');
@@ -70,23 +70,4 @@ test('document title words count as context, and bullet answers work', () => {
   const ans = 'Bike share now has 340 stations and about 4,100 bikes.\n- Ridership rose 25% versus Q2.\n- Helmets are provided at every station.\n- The city plans to add scooters next spring.';
   const v = checkAnswer(src, ans).results.map((r) => r.verdict);
   assert.deepEqual(v, ['supported', 'number', 'negation', 'unsupported']);
-});
-
-test('bill case 1: a changed amount is a number mismatch', () => {
-  const r = checkAnswer(BILL_QUOTE, BILLS.amount);
-  assert.deepEqual(r.results.map((x) => x.verdict), ['number', 'supported', 'supported']);
-  assert.deepEqual(r.results[0].numbers, { claim: ['380'], source: ['280'] });
-});
-
-test('bill case 2: a fee charged twice is a duplicate of the earlier line', () => {
-  const r = checkAnswer(BILL_QUOTE, BILLS.duplicate);
-  assert.deepEqual(r.results.map((x) => x.verdict), ['supported', 'supported', 'supported', 'duplicate']);
-  assert.equal(r.results[3].duplicateOf, 1);
-  assert.match(toMarkdownReport(r), /Repeats line 2/);
-});
-
-test('bill case 3: a bill that matches the quote passes every line', () => {
-  const r = checkAnswer(BILL_QUOTE, BILLS.ok);
-  assert.equal(r.supported, 3);
-  assert.equal(r.checked, 3);
 });

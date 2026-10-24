@@ -11,7 +11,6 @@ export const VERDICTS = {
   unsupported: { label: 'No receipt', icon: '❌' },
   number: { label: 'Number mismatch', icon: '🔢' },
   negation: { label: 'Negation flip', icon: '⚠️' },
-  duplicate: { label: 'Duplicate', icon: '🔁' },
   short: { label: 'Too short to check', icon: '·' },
 };
 
@@ -214,22 +213,6 @@ export function verdictFor(claim, terms, matches, index) {
   return { verdict, coverage: cov, numbers };
 }
 
-/** A checked line that repeats an earlier one (same content words, same numbers) is a Duplicate, e.g. a fee billed twice. */
-export function markDuplicates(results) {
-  const seen = new Map();
-  for (const r of results) {
-    if (r.verdict === 'short') continue;
-    const key = `${[...r.terms].sort().join(' ')}|${extractNumbers(r.sentence).sort().join(',')}`;
-    if (seen.has(key)) {
-      r.verdict = 'duplicate';
-      r.duplicateOf = seen.get(key);
-    } else {
-      seen.set(key, r.id);
-    }
-  }
-  return results;
-}
-
 /** Main entry: check every sentence of `answer` against `sources`. */
 export function checkAnswer(sources, answer) {
   const index = buildIndex(sources);
@@ -239,7 +222,6 @@ export function checkAnswer(sources, answer) {
     const v = verdictFor(sentence, terms, matches, index);
     return { id: i, sentence, terms, matches, ...v };
   });
-  markDuplicates(results);
   const checked = results.filter((r) => r.verdict !== 'short');
   const counts = Object.fromEntries(Object.keys(VERDICTS).map((k) => [k, results.filter((r) => r.verdict === k).length]));
   return {
@@ -262,7 +244,6 @@ export function toMarkdownReport(report) {
     if (r.matches[0] && r.verdict !== 'short') {
       lines.push(`  - Closest source (${r.matches[0].docTitle}, ${Math.round(r.coverage * 100)}%): "${r.matches[0].text}"`);
     }
-    if (r.verdict === 'duplicate') lines.push(`  - Repeats line ${r.duplicateOf + 1}`);
     if (r.numbers) lines.push(`  - Answer says ${r.numbers.claim.join(', ')} · Source says ${r.numbers.source.join(', ') || '—'}`);
   }
   lines.push('', '_Receipts checks whether claims appear in the sources, not whether they are true._');

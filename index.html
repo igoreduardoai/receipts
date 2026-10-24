@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Receipts — before you pay, find what doesn't add up</title>
-  <meta name="description" content="Check a bill against its quote, or an AI answer against its sources. Receipts checks every line and shows the source line that backs it. Runs locally." />
+  <title>Receipts — show me the receipts for every AI claim</title>
+  <meta name="description" content="Paste an AI answer and its sources. Receipts checks every sentence and shows the source line that backs it. Runs locally." />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧾</text></svg>" />
   <link rel="stylesheet" href="src/styles.css" />
 </head>
@@ -14,7 +14,7 @@
       <span class="logo" aria-hidden="true">🧾</span>
       <div>
         <h1>Receipts</h1>
-        <p class="tagline">Before you pay, find what doesn't add up in this bill.</p>
+        <p class="tagline">Show me the receipts for every AI claim.</p>
       </div>
     </div>
     <p class="privacy" title="No network calls are made">🔒 Runs in your browser. Nothing is uploaded.</p>
@@ -25,28 +25,22 @@
       <div class="field">
         <div class="field-head">
           <label for="sources">1 · Sources</label>
-          <span class="hint">What the text should match: the quote you agreed to, a contract, a report. Separate documents with a line <code>---</code>; start one with <code># Title</code> to name it.</span>
+          <span class="hint">Paste the documents the answer should come from. Separate documents with a line <code>---</code>; start one with <code># Title</code> to name it.</span>
         </div>
         <textarea id="sources" spellcheck="false" placeholder="# Quarterly report&#10;Paste the source text here…"></textarea>
       </div>
       <div class="field">
         <div class="field-head">
-          <label for="answer">2 · Text to check</label>
-          <span class="hint">The bill or invoice lines, or an AI-written answer. One line or sentence each.</span>
+          <label for="answer">2 · AI answer</label>
+          <span class="hint">Paste what ChatGPT, Claude or any assistant wrote.</span>
         </div>
-        <textarea id="answer" spellcheck="false" placeholder="Paste the bill lines or the AI answer here…"></textarea>
+        <textarea id="answer" spellcheck="false" placeholder="Paste the AI-written summary or answer here…"></textarea>
       </div>
     </section>
 
     <div class="actions">
       <button id="check" class="primary" type="button">Check receipts <kbd>Ctrl</kbd>+<kbd>Enter</kbd></button>
-      <select id="sample" aria-label="Load a sample">
-        <option value="">Load a sample…</option>
-        <option value="bill-amount">Bill: wrong amount</option>
-        <option value="bill-duplicate">Bill: charged twice</option>
-        <option value="bill-ok">Bill: matches the quote</option>
-        <option value="library">AI summary of a report</option>
-      </select>
+      <button id="sample" type="button">Load sample</button>
       <button id="clear" type="button">Clear</button>
       <span id="message" class="message" role="status" aria-live="polite"></span>
     </div>
@@ -63,20 +57,20 @@
       </div>
       <div class="grid">
         <article class="paper">
-          <h2>Your text, stamped</h2>
-          <p class="sub">Click any line to see its receipt.</p>
+          <h2>Your AI answer, stamped</h2>
+          <p class="sub">Click any sentence to see its receipt.</p>
           <ol id="sentences" class="sentences"></ol>
         </article>
         <aside id="evidence" class="evidence paper" aria-live="polite">
           <h2>Receipt</h2>
-          <p class="sub">Select a line on the left.</p>
+          <p class="sub">Select a sentence on the left.</p>
         </aside>
       </div>
     </section>
   </main>
 
   <footer>
-    Receipts checks whether each line <em>appears in your sources</em> — not whether it is true. It compares line by line and does not recompute totals. Matching is word-based (BM25 + term coverage), so paraphrases may show as Partial. Samples are fictional.
+    Receipts checks whether each claim <em>appears in your sources</em> — not whether it is true. Matching is word-based (BM25 + term coverage), so paraphrases may show as Partial.
     <span class="legend"></span>
   </footer>
 
